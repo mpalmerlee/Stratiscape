@@ -1,0 +1,13 @@
+jCanvas
+Javascript Canvas, a simple Layered Graphics Interface for the HTML5 Canvas tag
+jCanvas.js
+Written by Matt Palmerlee
+Mastered Software
+http://www.masteredsoftware.com/
+
+MIT Licensed
+
+Leverages jQuery javascript DOM library
+
+uses John Resig's Simple JS Inheritance lib:
+http://ejohn.org/blog/simple-javascript-inheritance/
