@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Stratiscape example: pinwheel</title>
+<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="js-inherit.js"></script>
+<script type="text/javascript" src="jCanvas.js"></script>
+<script type="text/javascript" src="pinwheel.js"></script>
+<script type="text/javascript" src="dandelion-background.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+function rotatePinwheel(){
+	Pinwheel.rotateWheels(-5);
+	document.wheelLayer.needsDisplay = true;//set dirtyflag
+}
+
+function populatePinwheels() {
+	Pinwheel.populateWheels();//create our wheels
+	//add the wheels to the canvas
+	for(var i in Pinwheel.wheels)
+	{
+		document.wheelLayer.addChild(Pinwheel.wheels[i]);
+	}
+}
+
+function changeWindDirection() {
+	DandelionBackground.windAngle += DandelionBackground.nextRandomFloat(-5, 5);
+	if(DandelionBackground.windSpeed > 2)
+		DandelionBackground.windSpeed += DandelionBackground.nextRandomFloat(-0.5, 0.5);
+	else
+		DandelionBackground.windSpeed += DandelionBackground.nextRandomFloat(0, 2);
+	
+	document.windVane.angle = DandelionBackground.windAngle;
+	document.windVane.speed = DandelionBackground.windSpeed;
+	document.bgLayer.needsDisplay = true;
+	//$('#debugData').text('Wind Angle: ' + DandelionBackground.windAngle + ', Wind Speed: ' + DandelionBackground.windSpeed);
+}
+
+function moveDandelions() {
+	DandelionBackground.moveDandelions();
+	document.fgLayer.needsDisplay = true;//set dirtyflag
+}
+
+function populateDandelions() {
+	//add the dandelions to the canvas
+	for(var i in DandelionBackground.dandelions)
+	{
+		document.fgLayer.addChild(DandelionBackground.dandelions[i]);
+	}
+}
+
+
+WindVane = jCanvas.DrawnObject.extend({ //vane drawn object class
+
+	init: function(x, y, width, height, angle, speed) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		
+		this.angle = angle;
+		this.speed = speed;
+		
+		this.image = new Image();
+		//this.image.onload = function() {
+		//	
+		//};
+		this.image.src = "img/WindVane.png";
+	},
+	
+	draw: function(ctx) {
+		
+		//draw image
+		if(this.angle != 90)
+		{
+			ctx.save();
+			ctx.translate( this.x + this.width/2, this.y + this.height/2 );
+			ctx.rotate( (this.angle - 90) * DandelionBackground.degreesToRad);
+			ctx.translate( -this.width/2, -this.height/2 );
+			ctx.drawImage( this.image, 0, 0 );
+			ctx.restore();
+		}
+		else
+			ctx.drawImage(this.image, this.x, this.y);
+		
+		//draw text for wind direction and wind speed
+		var friendlyWindSpeed = this.speed.toFixed(2);//2 decimal spaces
+		var friendlyWindDirection = this.angle;
+		while(friendlyWindDirection > 360)
+			friendlyWindDirection -= 360;
+		while(friendlyWindDirection < 0)
+			friendlyWindDirection += 360;
+		
+		friendlyWindDirection = friendlyWindDirection.toFixed(2);//2 decimal spaces
+		
+		ctx.fillStyle = "green";
+		ctx.font = "bold 9px sans-serif";
+		ctx.textAlign = "left";
+		ctx.textBalseline = 'top';
+		//var textWidth = ctx.measureText(this.Planet.BoundingHex.Id);
+		ctx.fillText(friendlyWindSpeed + " MPH, " + friendlyWindDirection + "°", this.x - 12, this.y + this.height + 8);
+	}
+});
+
+$(document).ready(function() {
+	document.jCanvasDraw = new jCanvas({'containerSelector':'#canvasContainer',
+								'layers':[
+									{'name':'canvasPinwheelBackground', x:0, y:0, width:640, height:480,'zIndex':1, 'backgroundColor':'black'},
+									{'name':'canvasPinwheelWheels', x:170, y:90, width:300, height:300,'zIndex':2},
+									{'name':'canvasPinwheelForeground', x:0, y:0, width:640, height:480,'zIndex':3}
+								]
+							});
+	document.wheelLayer = document.jCanvasDraw.getLayer('canvasPinwheelWheels');
+	document.bgLayer = document.jCanvasDraw.getLayer('canvasPinwheelBackground');
+	document.fgLayer = document.jCanvasDraw.getLayer('canvasPinwheelForeground');
+	
+	document.windVane = new WindVane(571,5, 64, 64, 90, 0);
+	document.bgLayer.addChild(document.windVane);
+	
+	changeWindDirection();
+	
+	DandelionBackground.populateDandelions(160, populateDandelions);//create our background dandelions
+	
+	Pinwheel.init(populatePinwheels);
+	
+	setInterval('document.jCanvasDraw.draw()', 50);
+	
+	setInterval('rotatePinwheel()', 100);
+	
+	setInterval('moveDandelions()', 33);
+	
+	setInterval('changeWindDirection()', 1000);
+});
+	
+
+</script>
+</head>
+<body>
+<div id="canvasContainer" style="position: relative;"></div>
+<div id="debugData" style="position: relative; top:480px" />
+</body>
+</html>
