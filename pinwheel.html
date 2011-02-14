@@ -31,6 +31,10 @@ function changeWindDirection() {
 	else
 		DandelionBackground.windSpeed += DandelionBackground.nextRandomFloat(0, 2);
 	
+	updateWindVaneDisplay();
+}
+
+function updateWindVaneDisplay() {
 	document.windVane.angle = DandelionBackground.windAngle;
 	document.windVane.speed = DandelionBackground.windSpeed;
 	document.bgLayer.needsDisplay = true;
@@ -53,7 +57,7 @@ function populateDandelions() {
 
 WindVane = jCanvas.DrawnObject.extend({ //vane drawn object class
 
-	init: function(x, y, width, height, angle, speed) {
+	init: function(x, y, width, height, angle, speed, imageLoadedCallback) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -62,14 +66,24 @@ WindVane = jCanvas.DrawnObject.extend({ //vane drawn object class
 		this.angle = angle;
 		this.speed = speed;
 		
-		this.image = new Image();
-		//this.image.onload = function() {
-		//	
-		//};
-		this.image.src = "img/WindVane.png";
+		this.imageVane = new Image();
+		this.imageVane.onload = function() {
+			imageLoadedCallback();
+		};
+		this.imageVane.src = "img/WindVane.png";
 	},
 	
 	draw: function(ctx) {
+		
+		//draw circle:
+		var controlRectWidth = this.width;
+		 
+		ctx.beginPath();
+		ctx.arc(this.x + controlRectWidth/2,this.y + controlRectWidth/2,controlRectWidth/2,0,Math.PI*2, true);
+		ctx.lineWidth=2.0;
+		ctx.strokeStyle="green"; 
+		ctx.stroke();	
+		ctx.closePath();
 		
 		//draw image
 		if(this.angle != 90)
@@ -78,11 +92,11 @@ WindVane = jCanvas.DrawnObject.extend({ //vane drawn object class
 			ctx.translate( this.x + this.width/2, this.y + this.height/2 );
 			ctx.rotate( (this.angle - 90) * DandelionBackground.degreesToRad);
 			ctx.translate( -this.width/2, -this.height/2 );
-			ctx.drawImage( this.image, 0, 0 );
+			ctx.drawImage( this.imageVane, 0, 0 );
 			ctx.restore();
 		}
 		else
-			ctx.drawImage(this.image, this.x, this.y);
+			ctx.drawImage(this.imageVane, this.x, this.y);
 		
 		//draw text for wind direction and wind speed
 		var friendlyWindSpeed = this.speed.toFixed(2);//2 decimal spaces
@@ -103,10 +117,99 @@ WindVane = jCanvas.DrawnObject.extend({ //vane drawn object class
 	}
 });
 
+function addWindVaneToCanvas() {
+	document.bgLayer.addChild(document.windVane);
+	
+	changeWindDirection();
+	
+	setInterval('changeWindDirection()', 1000);
+}
+
+WindVaneControlButton = jCanvas.DrawnObject.extend({ //vane drawn object class
+	init: function(x, y, width, height, imgSrc, imageLoadedCallback, imageClickedCallback) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		
+		this.image = new Image();
+		this.image.onload = function() {
+			imageLoadedCallback();
+		};
+		this.image.src = imgSrc;
+		
+		this.imageClickedCallback = imageClickedCallback;
+	},
+	
+	draw: function(ctx) {
+		ctx.drawImage(this.image, this.x, this.y);
+	},
+	
+	isInBounds: function(x, y) {
+		if( x > this.x && x < this.x + this.width &&
+			y > this.y && y < this.y + this.height)
+			return true;
+		return false;
+	},
+	
+	click: function() {
+		this.imageClickedCallback();
+	}
+});
+
+function canvasPinwheelBackgroundClicked(pos) {
+	//console.log('canvas clicked ('+ pos.x +','+ pos.y +')');
+	
+	for(var i in document.bgLayer.children)
+	{
+		//TODO: provide some sort of highlight feedback on the button?
+		if(document.bgLayer.children[i].isInBounds(pos.x, pos.y))
+		{
+			document.bgLayer.children[i].click();
+		}
+	}
+}
+
+function windSpeedMinusControlButtonClicked() {
+	DandelionBackground.windSpeed -= 1;
+	updateWindVaneDisplay();
+}
+
+function windSpeedPlusControlButtonClicked() {
+	DandelionBackground.windSpeed += 1;
+	updateWindVaneDisplay();
+}
+
+function windAnglePlusControlButtonClicked() {
+	DandelionBackground.windAngle += 5;
+	updateWindVaneDisplay();
+}
+
+function windAngleMinusControlButtonClicked() {
+	DandelionBackground.windAngle -= 5;
+	updateWindVaneDisplay();
+}
+
+function addWindSpeedMinusControlButtonToCanvas() {
+	document.bgLayer.addChild(document.windSpeedMinusControlButton);
+}
+
+function addWindSpeedPlusControlButtonToCanvas() {
+	document.bgLayer.addChild(document.windSpeedPlusControlButton);
+}
+
+function addWindAnglePlusControlButtonToCanvas() {
+	document.bgLayer.addChild(document.windAnglePlusControlButton);
+}
+
+function addWindAngleMinusControlButtonToCanvas() {
+	document.bgLayer.addChild(document.windAngleMinusControlButton);
+}
+
 $(document).ready(function() {
 	document.jCanvasDraw = new jCanvas({'containerSelector':'#canvasContainer',
 								'layers':[
-									{'name':'canvasPinwheelBackground', x:0, y:0, width:640, height:480,'zIndex':1, 'backgroundColor':'black'},
+									{'name':'canvasPinwheelBackground', x:0, y:0, width:640, height:480,'zIndex':1, 'backgroundColor':'black', 'clickCallback':canvasPinwheelBackgroundClicked, 'mouseHitSelector':'#canvasMouseHitDetector'},
 									{'name':'canvasPinwheelWheels', x:170, y:90, width:300, height:300,'zIndex':2},
 									{'name':'canvasPinwheelForeground', x:0, y:0, width:640, height:480,'zIndex':3}
 								]
@@ -115,10 +218,12 @@ $(document).ready(function() {
 	document.bgLayer = document.jCanvasDraw.getLayer('canvasPinwheelBackground');
 	document.fgLayer = document.jCanvasDraw.getLayer('canvasPinwheelForeground');
 	
-	document.windVane = new WindVane(571,5, 64, 64, 90, 0);
-	document.bgLayer.addChild(document.windVane);
+	document.windVane = new WindVane(571,5, 64, 64, 90, 0, addWindVaneToCanvas);
 	
-	changeWindDirection();
+	document.windSpeedMinusControlButton = new WindVaneControlButton(571, 82, 16, 16, "img/WindSpeedButtonMinus.png", addWindSpeedMinusControlButtonToCanvas, windSpeedMinusControlButtonClicked);
+	document.windSpeedPlusControlButton = new WindVaneControlButton(619, 82, 16, 16, "img/WindSpeedButtonPlus.png", addWindSpeedPlusControlButtonToCanvas, windSpeedPlusControlButtonClicked);
+	document.windAnglePlusControlButton = new WindVaneControlButton(550, 5, 16, 16, "img/WindAngleButtonPlus.png", addWindAnglePlusControlButtonToCanvas, windAnglePlusControlButtonClicked);
+	document.windAngleMinusControlButton = new WindVaneControlButton(550, 53, 16, 16, "img/WindAngleButtonMinus.png", addWindAngleMinusControlButtonToCanvas, windAngleMinusControlButtonClicked);
 	
 	DandelionBackground.populateDandelions(160, populateDandelions);//create our background dandelions
 	
@@ -130,7 +235,7 @@ $(document).ready(function() {
 	
 	setInterval('moveDandelions()', 33);
 	
-	setInterval('changeWindDirection()', 1000);
+	
 });
 	
 
@@ -138,6 +243,7 @@ $(document).ready(function() {
 </head>
 <body>
 <div id="canvasContainer" style="position: relative;"></div>
+<div id="canvasMouseHitDetector" style="position: relative;width:640px;height:480px;z-Index:20;"></div>
 <div id="debugData" style="position: relative; top:480px" />
 </body>
 </html>
