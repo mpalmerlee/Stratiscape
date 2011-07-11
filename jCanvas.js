@@ -7,7 +7,7 @@
  */
 
 jCanvas = function(configObject) {
-	/** The config object looks like {'containerSelector':'#id', 'layers':[{'name':'layer1', x:0, y:0, width:640, height:480,'zIndex':1,'backgroundColor':'black', 'clickCallback':'fnptr', 'mouseHitSelector':'#id for the page element which will serve as the mouse event listener for this canvas layer'}]} **/
+	/** The config object looks like {'containerSelector':'#id', 'layers':[{'name':'layer1', x:0, y:0, width:640, height:480,'zIndex':1,'backgroundColor':'black', 'clickCallback':'fnptr', 'dblclickCallback':'fnptr', 'mouseHitSelector':'#id for the page element which will serve as the mouse event listener for this canvas layer'}]} **/
 	this.layers = [];
 	this.layersByName = {};//layer objects indexed by name
 	this.containerSelector = configObject.containerSelector;
@@ -43,30 +43,24 @@ jCanvas = function(configObject) {
 		this.container.append(canvas);
 		//lastClickHitDiv.append(canvasClickHitDiv);
 		//lastClickHitDiv = canvasClickHitDiv;//we append to the last click hit div (instead of always the container) so that the js event bubbling will work correctly
-			
-		if(layerConfig.clickCallback && layerConfig.mouseHitSelector)
+		
+		if(layerConfig.mouseHitSelector)
 		{
-			$(layerConfig.mouseHitSelector).live('click',{'mouseHitDiv':$(layerConfig.mouseHitSelector) ,'clickCallback':layerConfig.clickCallback}, function(e) {
-				//getCursorPosition
-				var pos = {'x':null, 'y':null};
-
-				if (e.pageX != undefined && e.pageY != undefined) {
-					pos.x = e.pageX;
-					pos.y = e.pageY;
-				}
-				else {
-					pos.x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-					pos.y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-				}
-				var positionOffset = e.data.mouseHitDiv.offset();
-				pos.x -= positionOffset.left;
-				pos.y -= positionOffset.top;
-				//pos.x -= e.data.mouseHitDiv[0].offsetLeft;
-				//pos.y -= e.data.mouseHitDiv[0].offsetTop;
-				
-				e.data.clickCallback(pos);
-			});
+			if(layerConfig.clickCallback)
+			{
+				$(layerConfig.mouseHitSelector).live('click',{'mouseHitDiv':$(layerConfig.mouseHitSelector) ,'clickCallback':layerConfig.clickCallback}, function(e) {
+					var pos = jCanvas.Global.getCursorPosition(e, e.data.mouseHitDiv);
+					e.data.clickCallback(pos);
+				});
+			}
 			
+			if(layerConfig.dblclickCallback)
+			{
+				$(layerConfig.mouseHitSelector).live('dblclick',{'mouseHitDiv':$(layerConfig.mouseHitSelector) ,'dblclickCallback':layerConfig.dblclickCallback}, function(e) {
+					var pos = jCanvas.Global.getCursorPosition(e, e.data.mouseHitDiv);
+					e.data.dblclickCallback(pos);
+				});
+			}
 		}
 			
 			
@@ -79,6 +73,28 @@ jCanvas = function(configObject) {
 };
 
 jCanvas.Global = {layerNextZIndex: 1};
+
+//returns a position object: {'x':null, 'y':null}
+jCanvas.Global.getCursorPosition = function(e, mouseHitDiv) {
+	//get Cursor Position relative to the mouseHitDiv coordinates
+	var pos = {'x':null, 'y':null};
+
+	if (e.pageX != undefined && e.pageY != undefined) {
+		pos.x = e.pageX;
+		pos.y = e.pageY;
+	}
+	else {
+		pos.x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		pos.y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	}
+	var positionOffset = mouseHitDiv.offset();
+	pos.x -= positionOffset.left;
+	pos.y -= positionOffset.top;
+	//pos.x -= e.data.mouseHitDiv[0].offsetLeft;
+	//pos.y -= e.data.mouseHitDiv[0].offsetTop;
+	
+	return pos;
+};
 
 jCanvas.prototype.getLayer = function(name){
 	if(this.layersByName[name])
