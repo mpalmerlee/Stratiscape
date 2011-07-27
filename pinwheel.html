@@ -214,26 +214,31 @@ $(document).ready(function() {
 									{'name':'canvasPinwheelForeground', x:0, y:0, width:640, height:480,'zIndex':3}
 								]
 							});
-	document.wheelLayer = document.jCanvasDraw.getLayer('canvasPinwheelWheels');
-	document.bgLayer = document.jCanvasDraw.getLayer('canvasPinwheelBackground');
-	document.fgLayer = document.jCanvasDraw.getLayer('canvasPinwheelForeground');
-	
-	document.windVane = new WindVane(571,5, 64, 64, 90, 0, addWindVaneToCanvas);
-	
-	document.windSpeedMinusControlButton = new WindVaneControlButton(571, 82, 16, 16, "img/WindSpeedButtonMinus.png", addWindSpeedMinusControlButtonToCanvas, windSpeedMinusControlButtonClicked);
-	document.windSpeedPlusControlButton = new WindVaneControlButton(619, 82, 16, 16, "img/WindSpeedButtonPlus.png", addWindSpeedPlusControlButtonToCanvas, windSpeedPlusControlButtonClicked);
-	document.windAnglePlusControlButton = new WindVaneControlButton(550, 5, 16, 16, "img/WindAngleButtonPlus.png", addWindAnglePlusControlButtonToCanvas, windAnglePlusControlButtonClicked);
-	document.windAngleMinusControlButton = new WindVaneControlButton(550, 53, 16, 16, "img/WindAngleButtonMinus.png", addWindAngleMinusControlButtonToCanvas, windAngleMinusControlButtonClicked);
-	
-	DandelionBackground.populateDandelions(160, populateDandelions);//create our background dandelions
-	
-	Pinwheel.init(populatePinwheels);
-	
-	setInterval('document.jCanvasDraw.draw()', 50);
-	
-	setInterval('rotatePinwheel()', 100);
-	
-	setInterval('moveDandelions()', 33);
+	if(document.jCanvasDraw.canvasSupported)
+	{
+		document.wheelLayer = document.jCanvasDraw.getLayer('canvasPinwheelWheels');
+		document.bgLayer = document.jCanvasDraw.getLayer('canvasPinwheelBackground');
+		document.fgLayer = document.jCanvasDraw.getLayer('canvasPinwheelForeground');
+		
+		document.windVane = new WindVane(571,5, 64, 64, 90, 0, addWindVaneToCanvas);
+		
+		document.windSpeedMinusControlButton = new WindVaneControlButton(571, 82, 16, 16, "img/WindSpeedButtonMinus.png", addWindSpeedMinusControlButtonToCanvas, windSpeedMinusControlButtonClicked);
+		document.windSpeedPlusControlButton = new WindVaneControlButton(619, 82, 16, 16, "img/WindSpeedButtonPlus.png", addWindSpeedPlusControlButtonToCanvas, windSpeedPlusControlButtonClicked);
+		document.windAnglePlusControlButton = new WindVaneControlButton(550, 5, 16, 16, "img/WindAngleButtonPlus.png", addWindAnglePlusControlButtonToCanvas, windAnglePlusControlButtonClicked);
+		document.windAngleMinusControlButton = new WindVaneControlButton(550, 53, 16, 16, "img/WindAngleButtonMinus.png", addWindAngleMinusControlButtonToCanvas, windAngleMinusControlButtonClicked);
+		
+		DandelionBackground.populateDandelions(160, populateDandelions);//create our background dandelions
+		
+		Pinwheel.init(populatePinwheels);
+		
+		setInterval('document.jCanvasDraw.draw()', 50);
+		
+		setInterval('rotatePinwheel()', 100);
+		
+		setInterval('moveDandelions()', 33);
+	} else {
+		$('#canvasContainer').html('<p style="color:red">Bummer! Your browser does not support the HTML 5 Canvas Tag!</p>');
+	}
 	
 	
 });

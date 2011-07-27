@@ -7,11 +7,26 @@
  */
 
 jCanvas = function(configObject) {
-	/** The config object looks like {'containerSelector':'#id', 'layers':[{'name':'layer1', x:0, y:0, width:640, height:480,'zIndex':1,'backgroundColor':'black', 'clickCallback':'fnptr', 'dblclickCallback':'fnptr', 'mouseHitSelector':'#id for the page element which will serve as the mouse event listener for this canvas layer'}]} **/
+	/** The config object looks like {'containerSelector':'#id', 'canvasNotSupportedCallback: 'fnptr', 'layers':[{'name':'layer1', x:0, y:0, width:640, height:480,'zIndex':1,'backgroundColor':'black', 'clickCallback':'fnptr', 'dblclickCallback':'fnptr', 'mouseHitSelector':'#id for the page element which will serve as the mouse event listener for this canvas layer'}]} **/
 	this.layers = [];
 	this.layersByName = {};//layer objects indexed by name
 	this.containerSelector = configObject.containerSelector;
 	this.container = $(this.containerSelector);
+	
+	
+	//check to see if the canvas tag is not supported
+	if(!document.createElement('canvas').getContext)
+	{
+		this.canvasSupported = false;
+		//todo: is this callback really necessary?
+		if(configObject.canvasNotSupportedCallback)
+		{
+			configObject.canvasNotSupportedCallback();
+		}
+		return;//might as well quit now
+	}
+	this.canvasSupported = true;
+	
 	//this.clickHitContainer = $('<div style="position: relative;"></div>');//TODO: give id?
 	//this.container.after(this.clickHitContainer);
 
