@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fireworks - Stratiscape Demo</title>
+<script type="text/javascript" src="js-inherit.js"></script>
+<script type="text/javascript" src="Stratiscape.js"></script>
+<script type="text/javascript" src="fireworks.js"></script>
+<script type="text/javascript" src="sfx-interface.js"></script>
+<script type="text/javascript" src="Stats.js"></script>
+<script type="text/javascript">
+
+function fwClicked(pos) {
+	//console.log('canvas clicked ('+ pos.x +','+ pos.y +')');
+	
+	//add a play piece to the playfield
+	FW.CreateBlast(pos.x, pos.y);
+}
+
+function setupFireworks() {
+
+	//stats.js
+	//https://github.com/mrdoob/stats.js
+	document.stats = new Stats();
+
+	// Align top-left
+	document.stats.getDomElement().style.position = 'absolute';
+	document.stats.getDomElement().style.left = '0px';
+	document.stats.getDomElement().style.top = '0px';
+
+	document.body.appendChild( document.stats.getDomElement() );
+
+	document.StratiscapeDraw = new Stratiscape({'containerId':'canvasContainer',
+								'layers':[
+									{'name':'canvasFWBackground', x:0, y:0, width:640, height:480,'zIndex':1, 'backgroundColor':'black'},
+									{'name':'canvasFWForeground', x:0, y:0, width:640, height:480,'zIndex':3, 'clickCallback':fwClicked, 'mouseHitId':'canvasMouseHitDetector'}
+								]
+							});
+	if(document.StratiscapeDraw.canvasSupported)
+	{
+		var foregroundLayer = document.StratiscapeDraw.getLayer('canvasFWBackground');
+		var backgroundLayer = document.StratiscapeDraw.getLayer('canvasFWBackground');
+		FW.Setup(foregroundLayer, backgroundLayer);
+		
+
+	} else {
+		$('#canvasContainer').html('<p style="color:red">Bummer! Your browser does not support the HTML 5 Canvas Tag!</p>');
+	}
+	
+}	
+
+</script>
+</head>
+<body onload="setupFireworks()" style="padding:0;margin:0;">
+	<div id="canvasContainer" style="position: relative;"></div>
+	<div id="canvasMouseHitDetector" style="position: relative;width:640px;height:480px;z-Index:20;background-color:black;opacity:0;"></div>
+	<div id="debugData" style="position: absolute;top:500px;" />
+</body>
+</html>
