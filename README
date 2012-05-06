@@ -7,7 +7,14 @@ http://www.masteredsoftware.com/
 
 MIT Licensed
 
-Leverages jQuery javascript DOM library
-
 uses John Resig's Simple JS Inheritance lib:
 http://ejohn.org/blog/simple-javascript-inheritance/
+
+See Examples for sample usage:
+
+mouseHitTest: How to have multiple offset mouse hit detectors and draw an object on click
+
+Fireworks: Simple example of adding drawn Objects to Stratiscape with animations
+
+Pinwheel: Example of multiple layers drawn independently and mouse interaction.
+

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stratiscape Mouse Hit tests</title>
+<script type="text/javascript" src="js-inherit.js"></script>
+<script type="text/javascript" src="Stratiscape.js"></script>
+<script type="text/javascript">
+
+function clicked1(pos) {
+	var st = 'canvas1 clicked ('+ pos.x +','+ pos.y +')';
+	//console.log(st);
+	document.getElementById('debugData').innerHTML = st;
+	document.canvas1.addChild(new smallPoint(pos.x, pos.y));
+}
+
+function clicked2(pos) {
+	var st = 'canvas2 clicked ('+ pos.x +','+ pos.y +')';
+	//console.log(st);
+	document.getElementById('debugData').innerHTML = st;
+	document.canvas2.addChild(new smallPoint(pos.x, pos.y));
+}
+
+function clicked3(pos) {
+	var st = 'canvas3 clicked ('+ pos.x +','+ pos.y +')';
+	//console.log(st);
+	document.getElementById('debugData').innerHTML = st;
+	document.canvas3.addChild(new smallPoint(pos.x, pos.y));
+}
+
+function setupTest() {
+
+	document.StratiscapeDraw = new Stratiscape({'containerId':'canvasContainer',
+								'layers':[
+									{'name':'canvasBackground', x:0, y:0, width:300, height:300,'zIndex':1, 'backgroundColor':'black'},
+									{'name':'canvas1', x:100, y:0, width:100, height:100,'zIndex':2, 'clickCallback':clicked1, 'mouseHitId':'canvasMouseHitDetector1'},
+									{'name':'canvas2', x:0, y:100, width:100, height:100,'zIndex':3, 'clickCallback':clicked2, 'mouseHitId':'canvasMouseHitDetector2'},
+									{'name':'canvas3', x:200, y:200, width:100, height:100,'zIndex':4, 'clickCallback':clicked3, 'mouseHitId':'canvasMouseHitDetector3'}
+								]
+							});
+	if(document.StratiscapeDraw.canvasSupported)
+	{
+		document.canvas1 = document.StratiscapeDraw.getLayer('canvas1');
+		document.canvas2 = document.StratiscapeDraw.getLayer('canvas2');
+		document.canvas3 = document.StratiscapeDraw.getLayer('canvas3');
+		
+		setInterval(function() { document.StratiscapeDraw.draw(); }, 1000/30);
+
+	} else {
+		$('#canvasContainer').html('<p style="color:red">Bummer! Your browser does not support the HTML 5 Canvas Tag!</p>');
+	}
+	
+}
+
+smallPoint = Stratiscape.DrawnObject.extend({ //peg/knob drawn object class
+
+	init: function(x, y) {
+		this.x = x;
+		this.y = y;
+		this.r = 20;
+	},
+	
+	draw: function(ctx) {
+	
+		ctx.strokeStyle = '#FFF';
+		ctx.fillStyle = '#FF0';
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		ctx.arc(this.x,this.y,this.r/2,0,Math.PI*2,true);
+		ctx.closePath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	
+});
+
+</script>
+</head>
+<body onload="setupTest()" style="padding:0;margin:0;">
+	<div style="margin-top:30px;margin-left:30px;">
+		<div id="canvasContainer" style="position: relative;"></div>
+		<div id="canvasMouseHitContainer" style="position: relative;width:300px;height:300px;z-index:10">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr><td>&nbsp;</td><td><div id="canvasMouseHitDetector1" style="width:100px;height:100px;z-Index:20;background-color:red;opacity:0.2;"></div></td><td>&nbsp;</td></tr>
+				<tr><td><div id="canvasMouseHitDetector2" style="width:100px;height:100px;z-Index:20;background-color:green;opacity:0.2;"></div></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+				<tr><td>&nbsp;</td><td>&nbsp;</td><td><div id="canvasMouseHitDetector3" style="width:100px;height:100px;z-Index:20;background-color:blue;opacity:0.2;"></div></td></tr>
+			</table>
+		</div>
+	</div>
+	<div id="debugData" style="position: absolute;top:400px;" />
+</body>
+</html>
