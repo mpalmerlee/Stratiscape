@@ -67,7 +67,7 @@ Stratiscape = function(configObject) {
 				mouseHitElm.layerConfig = layerConfig;
 				Stratiscape.Global.onEvent(mouseHitElm, 'click', function(e) {
 					var pos = Stratiscape.Global.getCursorPosition(e);
-					e.srcElement.layerConfig.clickCallback(pos);
+					(e.srcElement || e.target).layerConfig.clickCallback(pos);
 				});
 			}
 			
@@ -76,7 +76,7 @@ Stratiscape = function(configObject) {
 				mouseHitElm.layerConfig = layerConfig;
 				Stratiscape.Global.onEvent(mouseHitElm, 'dblclick', function(e) {
 					var pos = Stratiscape.Global.getCursorPosition(e);
-					e.srcElement.layerConfig.dblclickCallback(pos);
+					(e.srcElement || e.target).layerConfig.dblclickCallback(pos);
 				});
 			}
 		}
@@ -104,7 +104,7 @@ Stratiscape.Global.getCursorPosition = function(e) {
 		pos.y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
 	}
 	
-	var elm = e.srcElement;
+	var elm = e.srcElement || e.target;
 	
 	do {
 		pos.x -= elm.offsetLeft || 0;

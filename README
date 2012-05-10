@@ -1,6 +1,10 @@
 Stratiscape, a simple Layered Graphics Interface for the HTML5 Canvas tag
 Stratiscape.js
 Written by Matt Palmerlee
+
+Live Demos/Examples:
+http://mpalmerlee.github.com/Stratiscape/
+
 Mastered Software
 http://www.masteredsoftware.com/
 
@@ -13,7 +17,9 @@ See Examples for sample usage:
 
 mouseHitTest: How to have multiple offset mouse hit detectors and draw an object on click
 
+Simple: Simple example with two layers, a background box and a foreground of circles bouncing around it
+See article: http://www.mattpalmerlee.com/2012/05/07/stratiscape-layered-approach-to-html5-canvas/ on how to create this sample.
+
 Fireworks: Simple example of adding drawn Objects to Stratiscape with animations
 
 Pinwheel: Example of multiple layers drawn independently and mouse interaction.
-
