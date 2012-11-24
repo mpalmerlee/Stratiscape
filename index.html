@@ -1,129 +1,90 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset='utf-8'>
 
-  <title>mpalmerlee/Stratiscape @ GitHub</title>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Stratiscape : A simple Layered Graphics Interface for the HTML5 Canvas tag" />
 
-  <style type="text/css">
-    body {
-      padding:0; 
-	  margin:0;
-      background-color: #DDD;
-      font-family: "Helvetica,Arial,FreeSans";
-      color: #008000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #3366ff; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #3366ff; }
-    h3 { text-align: center; color: #3366ff; }
-    a { color: #3366ff; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #008000; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-	iframe{ padding:0px; margin:0px; }
-  </style>
-	<script type="text/javascript">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-7797548-3']);
-	  _gaq.push(['_trackPageview']);
+    <title>Stratiscape</title>
+  </head>
 
-	  (function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
+  <body>
 
-	</script>
-</head>
-<body>
-  <a href="http://github.com/mpalmerlee/Stratiscape"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/mpalmerlee/Stratiscape">View on GitHub</a>
 
-  <div id="container">
+          <h1 id="project_title">Stratiscape</h1>
+          <h2 id="project_tagline">A simple Layered Graphics Interface for the HTML5 Canvas tag</h2>
 
-    <div class="download">
-      <a href="http://github.com/mpalmerlee/Stratiscape/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/mpalmerlee/Stratiscape/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/mpalmerlee/Stratiscape/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/mpalmerlee/Stratiscape/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
     </div>
 
-    <h1><a href="http://github.com/mpalmerlee/Stratiscape">Stratiscape</a>
-      <span class="small">by <a href="http://github.com/mpalmerlee">mpalmerlee</a></span></h1>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Stratiscape.js</h1>
 
-    <div class="description">
-      Simple HTML5 Canvas library supporting multiple layers and a drawn object model.
+<p>Written by Matt Palmerlee
+<a href="http://www.mattpalmerlee.com/">http://www.mattpalmerlee.com/</a>
+Mastered Software
+<a href="http://www.masteredsoftware.com/">http://www.masteredsoftware.com/</a></p>
+
+<p>Live Demos/Examples:
+<a href="http://mpalmerlee.github.com/Stratiscape/">http://mpalmerlee.github.com/Stratiscape/</a></p>
+
+<p>MIT Licensed</p>
+
+<p>uses John Resig's Simple JS Inheritance lib:
+<a href="http://ejohn.org/blog/simple-javascript-inheritance/">http://ejohn.org/blog/simple-javascript-inheritance/</a></p>
+
+<h1>See Examples for sample usage:</h1>
+
+<ul>
+<li><p>mouseHitTest: How to have multiple offset mouse hit detectors and draw an object on click</p></li>
+<li><p>Simple: Simple example with two layers, a background box and a foreground of circles bouncing around it
+See article: <a href="http://www.mattpalmerlee.com/2012/05/07/stratiscape-layered-approach-to-html5-canvas/">http://www.mattpalmerlee.com/2012/05/07/stratiscape-layered-approach-to-html5-canvas/</a> on how to create this sample.</p></li>
+<li><p>Fireworks: Simple example of adding drawn Objects to Stratiscape with animations</p></li>
+<li><p>Pinwheel: Example of multiple layers drawn independently and mouse interaction.</p></li>
+</ul><h1>Projects that use Stratiscape:</h1>
+
+<ul>
+<li><p>Astriarch - Ruler of the Stars, space strategy game  <a href="http://www.astriarch.com/">http://www.astriarch.com/</a></p></li>
+<li><p>Chem Fight - Chemistry Battle Game - Entry for the js13kgames competition <a href="http://masteredsoftware.com/chemfight/">http://masteredsoftware.com/chemfight/</a><br>
+sourcecode: <a href="https://github.com/mpalmerlee/ChemFight">https://github.com/mpalmerlee/ChemFight</a></p></li>
+<li><p>Qlinqo - Qlinqo is an HTML5 Game similar to Plinko on the Price is Right, drop your game piece and try to get it into a high-scoring slot!  <a href="http://www.masteredsoftware.com/qlinqo/">http://www.masteredsoftware.com/qlinqo/</a>
+sourcecode: <a href="https://github.com/mpalmerlee/Qlinqo">https://github.com/mpalmerlee/Qlinqo</a></p></li>
+</ul>
+      </section>
     </div>
 
-    <p>Stratiscape - Multi-Layer Javascript Canvas Library</p>
-	<h2>Dependencies</h2>
-<p>John Resig's Simple JavaScript Inheritance library</p>
-<h2>License</h2>
-<p>MIT License</p>
-<h2>Authors</h2>
-<p><a href="http://www.mattpalmerlee.com/">Matt Palmerlee</a><br/>
-<a href="http://www.masteredsoftware.com/">Mastered Software</a>
-<br/>
-</p>
-
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/mpalmerlee/Stratiscape/zipball/master">zip</a> or
-      <a href="http://github.com/mpalmerlee/Stratiscape/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/mpalmerlee/Stratiscape</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/mpalmerlee/Stratiscape">mpalmerlee/Stratiscape</a>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Stratiscape maintained by <a href="https://github.com/mpalmerlee">mpalmerlee</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
     </div>
 
-  
-	<br />
-	<h2>Examples using Stratiscape:</h2>
-	
-	<p>Mouse Hit Test:</p>
-	<div>
-		<iframe src="mouseHitTest/mouseHitTest.html" width="340" height="340" frameborder="0"></iframe>
-	<p> Shows how to have multiple offset mouse hit detectors and draw an object on click.<p/>
-	</div>
-	
-	<p>Simple:</p>
-	<div>
-		<iframe src="simple/simple.html" width="640" height="480" frameborder="0"></iframe>
-	<p> Simple example with two layers, a background box and a foreground of circles bouncing around it.<p/>
-	<p>See article: <a href="http://www.mattpalmerlee.com/2012/05/07/stratiscape-layered-approach-to-html5-canvas/">Stratiscape – A layered approach to HTML5 Canvas drawing</a> on how to create this sample.</p>
-	</div>
-	
-	<p>Fireworks:</p>
-	<div>
-		<iframe src="fireworks/fireworks.html" width="640" height="480" frameborder="0"></iframe>
-	<p>Simple example of adding drawn Objects on click to Stratiscape with animations<p/>
-	</div>
-	
-	<p>Pinwheel and Dandelions:</p>
-	<div>
-		<iframe src="pinwheel/pinwheel.html" width="640" height="480" frameborder="0"></iframe>
-	<p>Example of multiple layers drawn independently and mouse interaction.<p/>
-	</div>
-	
-	<p>More examples to come.</p>
-  <br />
-  <br />
-</div>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-7797548-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
 
-</body>
+
+  </body>
 </html>
